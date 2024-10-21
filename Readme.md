@@ -19,7 +19,7 @@ go install github.com/draxil/whoisoncall@latest
 Now do:
 
 ```sh
-whoisoncall the ics URL for your team
+whoisoncall <the ics URL for your team>
 ```
 
 As a fellow lazy person you probably want to wrap this up as a shell script so you don't need that URL every time!
