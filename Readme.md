@@ -24,7 +24,7 @@ whoisoncall <the ics URL for your team>
 
 As a fellow lazy person you probably want to wrap this up as a shell script so you don't need that URL every time!
 
-# limitations
+# limitations & notes
 
 This is currently in a "done in five minutes to scratch an itch" state, so:
 
@@ -32,3 +32,5 @@ This is currently in a "done in five minutes to scratch an itch" state, so:
 2. Assumes every day *someone* needs to be on call.
 
 I may amend for the above so it would work with a personal calendar (am I on call?), or a team that only has limited windows of responsibility. If you somehow are reading this and care about these things.. Please pop me an issue!
+
+This refers to pager duty, but really any http available ics file which only has one event per day with a useful summary would work.
