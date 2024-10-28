@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -10,11 +11,17 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 {
+	var at string
+
+	flag.StringVar(&at, "at", "", "Override when we're querying, currently accepts an HH:MM time")
+
+	flag.Parse()
+
+	if len(flag.Args()) != 1 {
 		fatalf("expected exactly 1 pagerduty ical URL argument")
 	}
 
-	r, err := http.Get(os.Args[1])
+	r, err := http.Get(flag.Arg(0))
 	if err != nil {
 		fatalf("failed to get the ical file: %v", err)
 	}
@@ -29,6 +36,9 @@ func main() {
 	}
 
 	now := time.Now()
+
+	now = possiblyMonkeyWithTime(now, at)
+
 	var current *ics.VEvent
 
 	// this bit is not optimal, but hey:
@@ -68,4 +78,19 @@ func fatalf(s string, args ...interface{}) {
 
 func complainf(s string, args ...interface{}) {
 	fmt.Fprintf(os.Stderr, s+"\n", args...)
+}
+
+func possiblyMonkeyWithTime(t time.Time, at string) time.Time {
+	if at == "" {
+		return t
+	}
+
+	timeOfDay, err := time.Parse("15:04", at)
+	if err != nil {
+		fatalf("could not parse at %s: %v", at, err)
+	}
+
+	return time.Date(t.Year(), t.Month(), t.Day(),
+		timeOfDay.Hour(), timeOfDay.Minute(),
+		0, 0, t.Location())
 }
